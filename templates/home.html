@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+  {{ block.super }}
+
+{% endblock %}
+
+{% block content %}
+<div class="row">
+
+  <!-- Main Content Area -->
+  <div class="col-md-9 content-area">
+    {% block menu_content %}
+      <h2>Dashboard</h2>
+      <p>Welcome to the Hospital Management System Dashboard. Use the sidebar to navigate through the system.</p>
+    {% endblock %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Appointment List{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Appointment List</h1>
+    <a href="{% url 'book_appointment' %}" class="btn btn-primary mb-3">
+        <i class="bi bi-calendar-plus-fill"></i> Book Appointment
+    </a>
+    <ul class="list-group">
+        {% for appointment in appointments %}
+        <li class="list-group-item">
+            {{ appointment.patient }} with Dr. {{ appointment.doctor.get_full_name }} on {{ appointment.appointment_date }}
+        </li>
+        {% empty %}
+        <li class="list-group-item">No appointments found.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

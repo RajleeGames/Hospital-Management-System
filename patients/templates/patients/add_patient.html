@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Add Patient{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Add Patient</h1>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if form.errors %}
+          <div class="alert alert-danger">
+            <strong>Please correct the errors below:</strong>
+            {{ form.errors }}
+          </div>
+        {% endif %}
+        <button type="submit" class="btn btn-success mt-2">
+            <i class="bi bi-save-fill"></i> Add Patient
+        </button>
+    </form>
+    <a href="{% url 'patient_list' %}" class="btn btn-secondary mt-3">
+        <i class="bi bi-arrow-left-circle-fill"></i> Back to Patient List
+    </a>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+  <!-- Include Flatpickr CSS and JS for datepicker functionality -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    // Initialize Flatpickr on the date_of_birth field
+    flatpickr(".datepicker", {
+      dateFormat: "d/m/Y",
+      altInput: true,
+      altFormat: "F j, Y",
+      allowInput: true
+    });
+  </script>
+{% endblock %}

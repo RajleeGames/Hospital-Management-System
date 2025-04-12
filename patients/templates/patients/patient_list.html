@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Patient List{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Patient List</h1>
+<a class="btn btn-primary mb-3" href="{% url 'add_patient' %}">
+    <i class="bi bi-person-plus-fill"></i> Add New Patient
+</a>
+
+<ul class="list-group">
+    {% for patient in patients %}
+    <li class="list-group-item">
+        {{ patient.first_name }} {{ patient.last_name }} - {{ patient.contact_number }}
+    </li>
+    {% empty %}
+    <li class="list-group-item">No patients found.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
