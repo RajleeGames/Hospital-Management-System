@@ -22,8 +22,6 @@
       padding: 0;
     }
     /* =============== Sidebar Styles =============== */
-    /* The sidebar is fixed and initially fully visible on desktop.
-       It can collapse to a narrower state when toggled. */
     #sidebar {
       position: fixed;
       top: 0;
@@ -36,11 +34,9 @@
       overflow-y: auto;
       z-index: 1050;
     }
-    /* Collapsed state – reduced width so only icons (or minimal text) show */
     #sidebar.collapsed {
       width: 60px;
     }
-    /* Sidebar header with a toggle button (3-line hamburger) visible in desktop */
     .sidebar-header {
       display: flex;
       align-items: center;
@@ -53,7 +49,6 @@
       font-size: 1.2rem;
       white-space: nowrap;
     }
-    /* Toggle Button Styles */
     .toggle-btn {
       background: transparent;
       border: none;
@@ -62,7 +57,6 @@
       cursor: pointer;
       margin-right: 10px;
     }
-    /* Sidebar Links – similar to your hospital links but with icon spacing */
     #sidebar a {
       color: #ddd;
       padding: 12px 20px;
@@ -94,35 +88,29 @@
     #sidebar.collapsed ~ #mainContent {
       margin-left: 60px;
     }
+    /* =============== Navbar Styles =============== */
+    .navbar-custom {
+      background-color: #0d6efd; /* Change to desired color */
+    }
+    .navbar-custom .navbar-brand,
+    .navbar-custom .nav-link,
+    .navbar-custom .navbar-text {
+      color: #fff;
+    }
     /* =============== Mobile Adjustments =============== */
     @media (max-width: 767.98px) {
-      /* On mobile, hide the sidebar to the left */
       #sidebar {
         left: -220px;
       }
-      /* The .active class will slide the sidebar into view */
       #sidebar.active {
         left: 0;
       }
-      /* Ensure main content occupies full width */
       #mainContent {
         margin-left: 0;
       }
-      /* Mobile-specific toggle buttons */
       .d-md-none {
         display: inline-block !important;
       }
-    }
-    /* =============== Navbar Styles =============== */
-    .navbar {
-      background-color: #0d6efd;
-    }
-    .hamburger {
-      font-size: 1.5rem;
-      background: none;
-      border: none;
-      color: white;
-      margin-right: 15px;
     }
   </style>
 
@@ -130,29 +118,44 @@
 </head>
 <body>
 
-
   <!-- Sidebar -->
   <div id="sidebar">
     <div class="sidebar-header">
-      <!-- Desktop toggle button (3-line icon) – visible on medium and up -->
+      <!-- Desktop toggle button – visible on medium and up -->
       <button id="desktopToggle" class="toggle-btn d-none d-md-block">
         <i class="bi bi-list"></i>
       </button>
-      <span class="title">Rajlee Hospital </span>
-      <!-- Mobile Close Button – only on mobile -->
-
+      <span class="title">Rajlee Hospital</span>
     </div>
-    <!-- Sidebar Links (5 main items for Hospital) -->
+    <!-- Sidebar Links -->
     <a href="/"><i class="bi bi-house-door menu-icon"></i><span class="menu-text">Home</span></a>
     <a href="/patients/"><i class="bi bi-people menu-icon"></i><span class="menu-text">Patients</span></a>
     <a href="/appointments/"><i class="bi bi-calendar-check menu-icon"></i><span class="menu-text">Appointments</span></a>
     <a href="/admin/"><i class="bi bi-shield-lock menu-icon"></i><span class="menu-text">Admin</span></a>
     <a href="/reports/"><i class="bi bi-bar-chart-line menu-icon"></i><span class="menu-text">Reports</span></a>
-    <!-- If you need to add more hospital-related features, you can insert additional links here -->
   </div>
 
   <!-- Main Content Area -->
   <div id="mainContent" class="content-area">
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom mb-4">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Rajlee Hospital</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" 
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <!-- Date/Time display -->
+            <li class="nav-item">
+              <span class="navbar-text" id="datetime"></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
     {% block content %}
     <!-- Page-specific content goes here -->
     {% endblock %}
@@ -164,20 +167,32 @@
 
   <!-- Sidebar Toggle Scripts -->
   <script>
-    // Desktop sidebar toggle: toggles collapsed state (narrow sidebar) on desktop
     document.getElementById("desktopToggle").addEventListener("click", function() {
       document.getElementById("sidebar").classList.toggle("collapsed");
     });
 
-    // Mobile: open sidebar by adding "active" class
-    document.getElementById("mobileSidebarToggle").addEventListener("click", function() {
-      document.getElementById("sidebar").classList.add("active");
-    });
+    // Mobile Sidebar Toggle (if using dedicated buttons)
+    if(document.getElementById("mobileSidebarToggle")){
+      document.getElementById("mobileSidebarToggle").addEventListener("click", function() {
+        document.getElementById("sidebar").classList.add("active");
+      });
+    }
+    if(document.getElementById("mobileSidebarClose")){
+      document.getElementById("mobileSidebarClose").addEventListener("click", function() {
+        document.getElementById("sidebar").classList.remove("active");
+      });
+    }
 
-    // Mobile: close sidebar by removing "active" class
-    document.getElementById("mobileSidebarClose").addEventListener("click", function() {
-      document.getElementById("sidebar").classList.remove("active");
-    });
+    // Real-time Date and Time Script
+    function updateDateTime() {
+      const now = new Date();
+      const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric',
+                        hour: 'numeric', minute: 'numeric', second: 'numeric' };
+      document.getElementById("datetime").textContent = now.toLocaleDateString('en-US', options);
+    }
+    // Update the time immediately and then every second
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
   </script>
 
   {% block extra_scripts %}{% endblock %}
